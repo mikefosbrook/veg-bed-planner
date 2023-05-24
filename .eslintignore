@@ -1,0 +1,6 @@
+COPY
+node_modules/
+dist/
+.prettierrc
+.eslintrc.cjs
+env.d.ts
