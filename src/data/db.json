@@ -1,0 +1,22 @@
+{
+  "beds": [
+    {
+      "id": 1,
+      "name": "Bed 1",
+      "cellsX": 6,
+      "cellsY": 4
+    },
+    {
+      "id": 2,
+      "name": "Bed 2",
+      "cellsX": 12,
+      "cellsY": 6
+    },
+    {
+      "id": 3,
+      "name": "Bed 3",
+      "cellsX": 6,
+      "cellsY": 6
+    }
+  ]
+}
