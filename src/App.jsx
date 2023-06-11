@@ -1,4 +1,5 @@
 import './App.scss';
+import Home from './components/Home.jsx';
 import Bed from './components/Bed.jsx';
 import CreateBed from './components/CreateBed';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -10,7 +11,8 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<CreateBed />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/create-bed" element={<CreateBed />} />
           <Route path="/beds/:id" element={<Bed />} />
         </Routes>
       </BrowserRouter>
