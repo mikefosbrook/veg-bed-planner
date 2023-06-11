@@ -1,28 +1,7 @@
-import { useState, useEffect } from 'react';
+import useFetch from '../hooks/useFetch';
 
 export default function Bed() {
-  const [bedDetails, setBedDetails] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetch('http://localhost:4000/beds/1')
-      .then((res) => {
-        if (!res.ok) {
-          throw Error('Could not fetch the data for that resource');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setBedDetails(data);
-        setIsLoading(false);
-        setError(null);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setError(err.message);
-      });
-  }, []);
+  const { data: bedDetails, isLoading, error } = useFetch('http://localhost:4000/beds/1');
 
   return (
     <>
