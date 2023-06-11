@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateBed() {
   const [name, setName] = useState('');
   const [cellsX, setCellsX] = useState(1);
   const [cellsY, setCellsY] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   function createCells(x, y) {
     const cells = x * y;
@@ -20,13 +23,30 @@ export default function CreateBed() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const bed = {
       name,
       cellsX,
       cellsY,
       cells: createCells(cellsX, cellsY),
     };
-    console.log(bed);
+
+    fetch('http://localhost:4000/beds/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bed),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error('Could not fetch the data for that resource');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setIsLoading(false);
+        const id = data.id;
+        navigate(`/beds/${id}`);
+      });
   };
 
   return (
@@ -55,7 +75,11 @@ export default function CreateBed() {
           value={cellsY}
           onChange={(e) => setCellsY(e.target.value)}
         />
-        <input type="submit" value="Create" disabled={name == '' ? true : false} />
+        <input
+          type="submit"
+          value={isLoading ? 'Creating bed...' : 'Create bed'}
+          disabled={name == '' ? true : false}
+        />
       </form>
     </>
   );

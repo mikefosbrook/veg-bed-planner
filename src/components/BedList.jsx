@@ -7,6 +7,9 @@ export default function BedList({ beds }) {
         <div className="beds-preview" key={beds.id}>
           <Link to={`/beds/${beds.id}`}>
             <h2>{beds.name}</h2>
+            <p>
+              ({beds.cellsX} x {beds.cellsY})
+            </p>
           </Link>
         </div>
       ))}
