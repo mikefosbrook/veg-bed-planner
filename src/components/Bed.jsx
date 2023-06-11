@@ -1,7 +1,10 @@
 import useFetch from '../hooks/useFetch';
+import { useParams } from 'react-router-dom';
 
 export default function Bed() {
-  const { data: bedDetails, isLoading, error } = useFetch('http://localhost:4000/beds/1');
+  const { id } = useParams();
+
+  const { data: bedDetails, isLoading, error } = useFetch(`http://localhost:4000/beds/${id}`);
 
   return (
     <>
