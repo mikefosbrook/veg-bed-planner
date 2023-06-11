@@ -1,10 +1,19 @@
 import useFetch from '../hooks/useFetch';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 export default function Bed() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const { data: bedDetails, isLoading, error } = useFetch(`http://localhost:4000/beds/${id}`);
+
+  const deleteBed = (id) => {
+    fetch(`http://localhost:4000/beds/${id}`, {
+      method: 'DELETE',
+    }).then(() => {
+      navigate('/');
+    });
+  };
 
   return (
     <>
@@ -24,6 +33,14 @@ export default function Bed() {
               return <div className="cell" key={i}></div>;
             })}
           </div>
+
+          <button
+            onClick={() => {
+              deleteBed(id);
+            }}
+          >
+            Delete
+          </button>
         </>
       )}
     </>
