@@ -8,6 +8,16 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 function App() {
   return (
     <>
+      <nav>
+        <ul>
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a href="/create-bed">Add bed</a>
+          </li>
+        </ul>
+      </nav>
       <h1>Veg bed planner</h1>
 
       <BrowserRouter>
