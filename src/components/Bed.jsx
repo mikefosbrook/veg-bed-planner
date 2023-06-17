@@ -7,12 +7,11 @@ export default function Bed() {
 
   const { data: bedDetails, isLoading, error } = useFetch(`http://localhost:4000/beds/${id}`);
 
-  const deleteBed = (id) => {
-    fetch(`http://localhost:4000/beds/${id}`, {
+  const deleteBed = async (id) => {
+    await fetch(`http://localhost:4000/beds/${id}`, {
       method: 'DELETE',
-    }).then(() => {
-      navigate('/');
     });
+    navigate('/');
   };
 
   return (

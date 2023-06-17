@@ -4,29 +4,25 @@ const useFetch = (url) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     const abortCont = new AbortController();
-    fetch(url, { signal: abortCont.signal })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error('Could not fetch the data for that resource');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setData(data);
+    const fetchData = async () => {
+      try {
+        const res = await fetch(url, { signal: abortCont.signal });
+        const newData = await res.json();
         setIsLoading(false);
-        setError(null);
-      })
-      .catch((err) => {
+        setData(newData);
+      } catch (err) {
         if (err.name === 'AbortError') {
           console.log('Fetch request was cancelled');
         } else {
           setIsLoading(false);
           setError(err.message);
         }
-      });
-
+      }
+    };
+    fetchData();
     return () => abortCont.abort();
   }, [url]);
 

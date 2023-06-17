@@ -8,18 +8,34 @@ export default function CreateBed() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  function createCells(x, y) {
+  const createCells = (x, y) => {
     const cells = x * y;
     const emptyCells = [];
     for (let i = 1; i <= cells; i++) {
       let cell = {
         id: i,
-        name: `Cell '${i}`,
+        name: `Cell ${i}`,
       };
       emptyCells.push(cell);
     }
     return emptyCells;
-  }
+  };
+
+  const createBed = async (bed) => {
+    try {
+      const res = await fetch('http://localhost:4000/beds/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bed),
+      });
+      setIsLoading(false);
+      const data = await res.json();
+      const id = data.id;
+      navigate(`/beds/${id}`);
+    } catch (err) {
+      throw Error('Could not fetch the data for that resource');
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,22 +47,7 @@ export default function CreateBed() {
       cells: createCells(cellsX, cellsY),
     };
 
-    fetch('http://localhost:4000/beds/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(bed),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error('Could not fetch the data for that resource');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setIsLoading(false);
-        const id = data.id;
-        navigate(`/beds/${id}`);
-      });
+    createBed(bed);
   };
 
   return (
