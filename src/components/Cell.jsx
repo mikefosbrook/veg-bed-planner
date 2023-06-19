@@ -1,12 +1,10 @@
 import { useState } from 'react';
 
 export default function Cell(props) {
-  const { id, name, vegetable, index, updateCell } = props;
-  const [isSelected, setSelected] = useState(false);
+  const { id, name, vegetable, index, isSelected, selectCells } = props;
 
   const handleClick = () => {
-    updateCell(index);
-    setSelected(!isSelected);
+    selectCells(index);
   };
 
   return (

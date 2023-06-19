@@ -12,6 +12,7 @@ export default function Bed() {
   const [bedData, setBedData] = useState(null);
   const [currentVeg, setCurrentVeg] = useState('');
   const [isSaved, setIsSaved] = useState(true);
+  const [selectedCells, setSelectedCells] = useState([]);
 
   useEffect(() => {
     if (data) {
@@ -19,14 +20,37 @@ export default function Bed() {
     }
   }, [data]);
 
-  const updateCell = (index) => {
-    if (currentVeg === '') {
+  const selectCells = (index) => {
+    let newSelectedCells = [...selectedCells];
+    if (newSelectedCells.includes(index)) {
+      newSelectedCells = newSelectedCells.filter((i) => i !== index);
+    } else {
+      newSelectedCells.push(index);
+    }
+    setSelectedCells(newSelectedCells);
+  };
+
+  const addVeg = (veg) => {
+    if (veg === '') {
       alert('Please select a vegetable');
       return;
     }
+    updateCells(veg);
+  };
+
+  const removeVeg = () => {
+    updateCells('');
+  };
+
+  const updateCells = (value) => {
     let newBedData = { ...bedData };
-    newBedData.cells[index].vegetable = currentVeg;
+
+    selectedCells.forEach((i) => {
+      newBedData.cells[i].vegetable = value;
+    });
+
     setBedData(newBedData);
+    setSelectedCells([]);
     setIsSaved(false);
   };
 
@@ -60,6 +84,20 @@ export default function Bed() {
       </button>
 
       <VegSelect veg={currentVeg} setCurrentVeg={setCurrentVeg} />
+
+      <button
+        onClick={() => {
+          addVeg(currentVeg);
+        }}
+        disabled={!selectedCells.length}
+      >
+        Apply selection
+      </button>
+
+      <button onClick={removeVeg} disabled={!selectedCells.length}>
+        Clear selection
+      </button>
+
       {bedData && (
         <>
           <h2>{bedData.name}</h2>
@@ -77,7 +115,8 @@ export default function Bed() {
                   key={cell.id}
                   index={i}
                   vegetable={cell.vegetable}
-                  updateCell={updateCell}
+                  selectCells={selectCells}
+                  isSelected={selectedCells.includes(i)}
                 ></Cell>
               );
             })}
@@ -88,7 +127,7 @@ export default function Bed() {
               deleteBed(id);
             }}
           >
-            Delete
+            Delete bed
           </button>
         </>
       )}
