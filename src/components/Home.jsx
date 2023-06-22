@@ -3,7 +3,8 @@ import useFetch from '../hooks/useFetch';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
-  const { data: beds, isLoading, error } = useFetch('http://localhost:4000/beds/');
+  const API_HOST = import.meta.env.VITE_API_HOST;
+  const { data: beds, isLoading, error } = useFetch(`${API_HOST}/beds/`);
 
   return (
     <div className="home">

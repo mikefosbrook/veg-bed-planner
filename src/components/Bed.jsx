@@ -8,7 +8,8 @@ export default function Bed() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { data, isLoading, error } = useFetch(`http://localhost:4000/beds/${id}`);
+  const API_HOST = import.meta.env.VITE_API_HOST;
+  const { data, isLoading, error } = useFetch(`${API_HOST}/beds/${id}`);
   const [bedData, setBedData] = useState(null);
   const [currentVeg, setCurrentVeg] = useState('');
   const [isSaved, setIsSaved] = useState(true);
@@ -55,7 +56,7 @@ export default function Bed() {
   };
 
   const deleteBed = async (id) => {
-    await fetch(`http://localhost:4000/beds/${id}`, {
+    await fetch(`${API_HOST}/beds/${id}`, {
       method: 'DELETE',
     });
     navigate('/');
@@ -63,7 +64,7 @@ export default function Bed() {
 
   const saveBed = async (id) => {
     try {
-      await fetch(`http://localhost:4000/beds/${id}`, {
+      await fetch(`${API_HOST}/beds/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bedData),
