@@ -10,10 +10,14 @@ export default function Home() {
     <div className="home">
       {error && <div>{error}</div>}
       {isLoading && <div>Loading...</div>}
-      <Link to="/create-bed">
-        <button type="button">Add a new bed</button>
-      </Link>
-      {beds && <BedList beds={beds} />}
+      {beds && (
+        <>
+          <Link to="/create-bed" role="button">
+            Add a new bed
+          </Link>
+          <BedList beds={beds} />
+        </>
+      )}
     </div>
   );
 }

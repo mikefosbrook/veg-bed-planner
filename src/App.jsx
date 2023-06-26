@@ -8,26 +8,30 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 function App() {
   return (
     <>
-      <nav>
-        <ul>
-          <li>
-            <a href="/">Home</a>
-          </li>
-          <li>
-            <a href="/create-bed">Add bed</a>
-          </li>
-        </ul>
-      </nav>
-      <h1>Veg bed planner</h1>
+      <header>
+        <nav className="container-fluid">
+          <ul>
+            <li>
+              <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/create-bed">Add bed</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main className="container">
+        <h1>Veg bed planner</h1>
 
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/create-bed" element={<CreateBed />} />
-          <Route path="/beds/:id" element={<Bed />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/create-bed" element={<CreateBed />} />
+            <Route path="/beds/:id" element={<Bed />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </main>
     </>
   );
 }
