@@ -4,9 +4,9 @@ A vegetable bed planning app based on the [Square Foot Gardening](https://square
 
 ## Technologies
 
-[Vite](https://vitejs.dev/ 'Vite')
-[React](https://react.dev/p:// 'React')
-[React Router](https://reactrouter.com/en/main:// 'React Router')
+[Vite](https://vitejs.dev/ 'Vite')<br>
+[React](https://react.dev/p:// 'React')<br>
+[React Router](https://reactrouter.com/en/main:// 'React Router')<br>
 [JSON Server](https://github.com/typicode/json-server 'JSON Server')
 
 ## Getting Started
@@ -29,7 +29,7 @@ npm run dev
 ```
 
 - The project will automatically launch in the browser at http://localhost:3000/
-- JSON Server will also run at the same time at lhttp://localhost:4000/
+- JSON Server will also run at the same time at http://localhost:4000/
 
 ## Data
 
