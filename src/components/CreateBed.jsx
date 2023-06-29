@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useFetch from '../hooks/useFetch';
 
 export default function CreateBed() {
+  const API_HOST = import.meta.env.VITE_API_HOST;
   const [name, setName] = useState('');
   const [cellsX, setCellsX] = useState(1);
   const [cellsY, setCellsY] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const { fetchRequest, isLoading, error } = useFetch(`${API_HOST}/beds`);
 
   const createCells = (x, y) => {
     const cells = x * y;
@@ -21,25 +24,22 @@ export default function CreateBed() {
     return emptyCells;
   };
 
-  const createBed = async (bed) => {
-    try {
-      const res = await fetch('http://localhost:4000/beds/', {
+  const createBed = (bed) => {
+    fetchRequest(
+      `${API_HOST}/beds`,
+      {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bed),
-      });
-      setIsLoading(false);
-      const data = await res.json();
-      const id = data.id;
-      navigate(`/beds/${id}`);
-    } catch (err) {
-      throw Error('Could not fetch the data for that resource');
-    }
+      },
+      (data) => {
+        navigate(`/beds/${data.id}`);
+      },
+    );
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
     const bed = {
       name,
       cellsX,
@@ -52,6 +52,9 @@ export default function CreateBed() {
 
   return (
     <>
+      {error && <div>{error}</div>}
+      {isLoading && <div>Loading...</div>}
+
       <h2>Create a new bed</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Name</label>

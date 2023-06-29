@@ -9,17 +9,16 @@ export default function Bed() {
   const navigate = useNavigate();
 
   const API_HOST = import.meta.env.VITE_API_HOST;
-  const { data, isLoading, error } = useFetch(`${API_HOST}/beds/${id}`);
+  const { fetchRequest, data, isLoading, error } = useFetch(`${API_HOST}/beds/${id}`);
   const [bedData, setBedData] = useState(null);
   const [currentVeg, setCurrentVeg] = useState('');
   const [isSaved, setIsSaved] = useState(true);
   const [selectedCells, setSelectedCells] = useState([]);
 
-  useEffect(() => {
-    if (data) {
-      setBedData(data);
-    }
-  }, [data]);
+  if (data && !bedData) {
+    // this is the first time we have data
+    setBedData(data);
+  }
 
   const selectCells = (index) => {
     let newSelectedCells = [...selectedCells];
@@ -55,24 +54,30 @@ export default function Bed() {
     setIsSaved(false);
   };
 
-  const deleteBed = async (id) => {
-    await fetch(`${API_HOST}/beds/${id}`, {
-      method: 'DELETE',
-    });
-    navigate('/');
+  const deleteBed = () => {
+    fetchRequest(
+      `${API_HOST}/beds/${id}`,
+      {
+        method: 'DELETE',
+      },
+      () => {
+        navigate('/');
+      },
+    );
   };
 
-  const saveBed = async (id) => {
-    try {
-      await fetch(`${API_HOST}/beds/${id}`, {
+  const saveBed = () => {
+    fetchRequest(
+      `${API_HOST}/beds/${id}`,
+      {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bedData),
-      });
-      setIsSaved(true);
-    } catch (err) {
-      console.log(err);
-    }
+      },
+      () => {
+        setIsSaved(true);
+      },
+    );
   };
 
   return (
@@ -80,7 +85,7 @@ export default function Bed() {
       {error && <div>{error}</div>}
       {isLoading && <div>Loading...</div>}
 
-      <button onClick={() => saveBed(id)} disabled={isSaved}>
+      <button onClick={() => saveBed()} disabled={isSaved}>
         Save
       </button>
 
@@ -107,25 +112,27 @@ export default function Bed() {
             {bedData.cellsX} x {bedData.cellsY}
           </p>
 
-          <div className="bed" style={{ gridTemplateColumns: 'auto '.repeat(bedData.cellsX) }}>
-            {bedData.cells.map((cell, i) => {
-              return (
-                <Cell
-                  name={cell.name}
-                  id={cell.id}
-                  key={cell.id}
-                  index={i}
-                  vegetable={cell.vegetable}
-                  selectCells={selectCells}
-                  isSelected={selectedCells.includes(i)}
-                ></Cell>
-              );
-            })}
+          <div className="bed-container">
+            <div className="bed" style={{ gridTemplateColumns: 'auto '.repeat(bedData.cellsX) }}>
+              {bedData.cells.map((cell, i) => {
+                return (
+                  <Cell
+                    name={cell.name}
+                    id={cell.id}
+                    key={cell.id}
+                    index={i}
+                    vegetable={cell.vegetable}
+                    selectCells={selectCells}
+                    isSelected={selectedCells.includes(i)}
+                  ></Cell>
+                );
+              })}
+            </div>
           </div>
 
           <button
             onClick={() => {
-              deleteBed(id);
+              deleteBed();
             }}
           >
             Delete bed
