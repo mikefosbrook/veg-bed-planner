@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 export default function Cell(props) {
   const { id, name, vegetable, index, isSelected, selectCells } = props;
 
@@ -13,6 +11,13 @@ export default function Cell(props) {
       className={`cell cell-${id} icon-${vegetable} ${isSelected ? 'cell-selected' : ''}`}
       data-cell-name={name}
       data-vegetable={vegetable}
+      role="gridcell"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          handleClick();
+        }
+      }}
     ></div>
   );
 }

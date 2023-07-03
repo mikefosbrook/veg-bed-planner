@@ -113,7 +113,7 @@ export default function Bed() {
           </p>
 
           <div className="bed-container">
-            <div className="bed" style={{ gridTemplateColumns: 'auto '.repeat(bedData.cellsX) }}>
+            <div className="bed" role="grid" style={{ gridTemplateColumns: 'auto '.repeat(bedData.cellsX) }}>
               {bedData.cells.map((cell, i) => {
                 return (
                   <Cell

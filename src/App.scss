@@ -18,6 +18,9 @@
   &-selected {
     background-color: paleturquoise;
   }
+  &:focus {
+    background-color: palegreen;
+  }
 }
 
 @media (max-width: 576px) {
@@ -44,7 +47,7 @@ nav {
 .beds-preview {
   &:hover {
     article {
-      background-color: pink;
+      background-color: rgba(16, 149, 193, 0.125);
     }
   }
   text-decoration: none;
@@ -73,5 +76,3 @@ $vegetables: 'beetroot', 'carrot', 'courgette', 'kale', 'leek', 'lettuce', 'onio
   background-color: #1095c1;
   color: #ffffff;
 }
-
-// disable hover styling from all child items within an anchor tag
