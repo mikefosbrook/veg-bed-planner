@@ -1,5 +1,5 @@
 import useFetch from '../hooks/useFetch';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Cell from './Cell';
 import VegSelect from './VegSelect';
@@ -9,7 +9,7 @@ export default function Bed() {
   const navigate = useNavigate();
 
   const API_HOST = import.meta.env.VITE_API_HOST;
-  const { fetchRequest, data, isLoading, error } = useFetch(`${API_HOST}/beds/${id}`);
+  const { data, isLoading, error, fetchRequest } = useFetch(`${API_HOST}/beds/${id}`);
   const [bedData, setBedData] = useState(null);
   const [currentVeg, setCurrentVeg] = useState('');
   const [isSaved, setIsSaved] = useState(true);

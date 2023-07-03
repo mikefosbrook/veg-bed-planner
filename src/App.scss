@@ -42,9 +42,12 @@ nav {
 }
 
 .beds-preview {
-  a {
-    text-decoration: none;
+  &:hover {
+    article {
+      background-color: pink;
+    }
   }
+  text-decoration: none;
   h2 {
     margin-bottom: 0;
   }
@@ -59,3 +62,16 @@ $vegetables: 'beetroot', 'carrot', 'courgette', 'kale', 'leek', 'lettuce', 'onio
     background-size: contain;
   }
 }
+
+.btn {
+  &-inline {
+    width: auto;
+  }
+}
+
+.active {
+  background-color: #1095c1;
+  color: #ffffff;
+}
+
+// disable hover styling from all child items within an anchor tag

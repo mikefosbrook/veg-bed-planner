@@ -1,17 +1,28 @@
 import { Link } from 'react-router-dom';
 
-export default function BedList({ beds }) {
+export default function BedList({ beds, deleteBed }) {
   return (
     <div className="bed-list">
-      {beds.map((beds) => (
-        <article className="beds-preview" key={beds.id}>
-          <Link to={`/beds/${beds.id}`}>
-            <h2>{beds.name}</h2>
+      {beds.map((bed) => (
+        <Link className="beds-preview" to={`/beds/${bed.id}`} key={bed.id}>
+          <article key={bed.id}>
+            <h2>{bed.name}</h2>
             <p>
-              ({beds.cellsX} x {beds.cellsY})
+              ({bed.cellsX} x {bed.cellsY})
             </p>
-          </Link>
-        </article>
+
+            <button
+              className="btn btn-inline outline"
+              type="button"
+              onClick={(e) => {
+                deleteBed(bed.id);
+                e.preventDefault();
+              }}
+            >
+              Delete
+            </button>
+          </article>
+        </Link>
       ))}
     </div>
   );

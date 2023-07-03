@@ -3,7 +3,7 @@ import Home from './components/Home.jsx';
 import Bed from './components/Bed.jsx';
 import NotFound from './components/NotFound.jsx';
 import CreateBed from './components/CreateBed';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route, NavLink } from 'react-router-dom';
 
 function App() {
   return (
@@ -12,25 +12,22 @@ function App() {
         <nav className="container-fluid">
           <ul>
             <li>
-              <a href="/">Home</a>
+              <NavLink to="/">Home</NavLink>
             </li>
             <li>
-              <a href="/create-bed">Add bed</a>
+              <NavLink to="/create-bed">Add bed</NavLink>
             </li>
           </ul>
         </nav>
       </header>
       <main className="container">
         <h1>Veg bed planner</h1>
-
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/create-bed" element={<CreateBed />} />
-            <Route path="/beds/:id" element={<Bed />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/create-bed" element={<CreateBed />} />
+          <Route path="/beds/:id" element={<Bed />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </main>
     </>
   );
