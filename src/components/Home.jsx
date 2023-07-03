@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import BedList from '../components/BedList';
 import useFetch from '../hooks/useFetch';
 import { Link } from 'react-router-dom';
