@@ -1,16 +1,14 @@
-/* eslint-disable */
-
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useBedsState } from '../context/beds/index';
 
 export default function CreateBed() {
+  const { beds: bedData, loading, error } = useBedsState();
   const API_HOST = import.meta.env.VITE_API_HOST;
   const [name, setName] = useState('');
   const [cellsX, setCellsX] = useState(1);
   const [cellsY, setCellsY] = useState(1);
   const navigate = useNavigate();
-
-  //  const { data, loading, error, fetchRequest } = useContext(DataContext);
 
   const createCells = (x, y) => {
     const cells = x * y;
@@ -26,12 +24,12 @@ export default function CreateBed() {
   };
 
   const createBed = async (bed) => {
-    await fetchRequest(`${API_HOST}/beds`, {
+    await fetch(`${API_HOST}/beds`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(bed),
     });
-    navigate(`/beds/${data.id}`);
+    navigate(`/beds/${bedData.id}`);
   };
 
   const handleSubmit = (e) => {
@@ -52,7 +50,7 @@ export default function CreateBed() {
       {loading && <div>Loading...</div>}
 
       <h2>Create a new bed</h2>
-      {data && (
+      {bedData && (
         <form onSubmit={handleSubmit}>
           <label htmlFor="name">Name</label>
           <input type="text" id="name" name="name" required value={name} onChange={(e) => setName(e.target.value)} />
