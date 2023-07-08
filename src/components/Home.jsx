@@ -1,33 +1,29 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import BedList from '../components/BedList';
-import useFetch from '../hooks/useFetch';
 import { Link } from 'react-router-dom';
+import { useBedsState } from '../context/beds/index';
+import { getBeds } from '../context/beds/actions';
+import { useBedsDispatch } from '../context/beds/context';
 
 export default function Home() {
-  const API_HOST = import.meta.env.VITE_API_HOST;
-  const { data, isLoading, error, fetchRequest } = useFetch(`${API_HOST}/beds/`);
-  const [bedData, setBedData] = useState(null);
+  const dispatchBeds = useBedsDispatch();
+  const { beds: bedData, loading, error } = useBedsState();
 
-  const deleteBed = (id) => {
-    fetchRequest(`${API_HOST}/beds/${id}`, { method: 'DELETE' }, () => {
-      setBedData(bedData.filter((bed) => bed.id !== id));
-    });
-  };
-
-  if (data && !bedData) {
-    setBedData(data);
-  }
+  useEffect(() => {
+    //only run if we don't already have data in context
+    if (bedData.length === 0) getBeds(dispatchBeds);
+  }, [bedData, dispatchBeds]);
 
   return (
     <div className="home">
-      {error && <div>{error}</div>}
-      {isLoading && <div>Loading...</div>}
+      {error && <div>{error.message}</div>}
+      {loading && <div>Loading...</div>}
       {bedData && (
         <>
           <Link to="/create-bed" role="button">
             Add a new bed
           </Link>
-          <BedList beds={bedData} deleteBed={deleteBed} />
+          <BedList beds={bedData} />
         </>
       )}
     </div>

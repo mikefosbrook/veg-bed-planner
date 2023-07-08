@@ -1,6 +1,7 @@
-import { useState } from 'react';
+/* eslint-disable */
+
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useFetch from '../hooks/useFetch';
 
 export default function CreateBed() {
   const API_HOST = import.meta.env.VITE_API_HOST;
@@ -9,7 +10,7 @@ export default function CreateBed() {
   const [cellsY, setCellsY] = useState(1);
   const navigate = useNavigate();
 
-  const { data, isLoading, error, fetchRequest } = useFetch(`${API_HOST}/beds`);
+  //  const { data, loading, error, fetchRequest } = useContext(DataContext);
 
   const createCells = (x, y) => {
     const cells = x * y;
@@ -24,18 +25,13 @@ export default function CreateBed() {
     return emptyCells;
   };
 
-  const createBed = (bed) => {
-    fetchRequest(
-      `${API_HOST}/beds`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bed),
-      },
-      (data) => {
-        navigate(`/beds/${data.id}`);
-      },
-    );
+  const createBed = async (bed) => {
+    await fetchRequest(`${API_HOST}/beds`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bed),
+    });
+    navigate(`/beds/${data.id}`);
   };
 
   const handleSubmit = (e) => {
@@ -53,7 +49,7 @@ export default function CreateBed() {
   return (
     <>
       {error && <div>{error}</div>}
-      {isLoading && <div>Loading...</div>}
+      {loading && <div>Loading...</div>}
 
       <h2>Create a new bed</h2>
       {data && (
@@ -82,7 +78,7 @@ export default function CreateBed() {
           />
           <input
             type="submit"
-            value={isLoading ? 'Creating bed...' : 'Create bed'}
+            value={loading ? 'Creating bed...' : 'Create bed'}
             disabled={name == '' ? true : false}
           />
         </form>

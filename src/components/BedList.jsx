@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom';
+//  use dispatch to delete bed
+import { useBedsDispatch } from '../context/beds/context';
+import { deleteBed } from '../context/beds/actions';
 
-export default function BedList({ beds, deleteBed }) {
+export default function BedList({ beds }) {
+  const dispatchBeds = useBedsDispatch();
+
   return (
     <div className="bed-list">
       {beds.map((bed) => (
@@ -15,7 +20,7 @@ export default function BedList({ beds, deleteBed }) {
               className="btn btn-inline outline"
               type="button"
               onClick={(e) => {
-                deleteBed(bed.id);
+                deleteBed(dispatchBeds, bed.id);
                 e.preventDefault();
               }}
             >
