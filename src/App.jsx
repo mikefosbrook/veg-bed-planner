@@ -4,7 +4,7 @@ import { BedsProvider } from './context/beds';
 import Home from './components/Home.jsx';
 import Bed from './components/Bed.jsx';
 import NotFound from './components/NotFound.jsx';
-import CreateBed from './components/CreateBed';
+import AddBed from './components/AddBed';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
                 <NavLink to="/">Home</NavLink>
               </li>
               <li>
-                <NavLink to="/create-bed">Add bed</NavLink>
+                <NavLink to="/add-bed">Add bed</NavLink>
               </li>
             </ul>
           </nav>
@@ -26,7 +26,7 @@ function App() {
           <h1>Veg bed planner</h1>
           <Routes>
             <Route path="/" element={<Home />} />
-            {/* <Route path="/create-bed" element={<CreateBed />} /> */}
+            <Route path="/add-bed" element={<AddBed />} />
             <Route path="/beds/:id" element={<Bed />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

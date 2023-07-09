@@ -20,7 +20,7 @@ export default function Home() {
       {loading && <div>Loading...</div>}
       {bedData && (
         <>
-          <Link to="/create-bed" role="button">
+          <Link to="/add-bed" role="button">
             Add a new bed
           </Link>
           <BedList beds={bedData} />

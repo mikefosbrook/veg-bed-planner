@@ -22,6 +22,7 @@ export const bedsReducer = (state, { type, payload, error }) => {
         ...state,
         loading: false,
         beds: [...state.beds, payload],
+        recentBed: payload,
       };
     case 'UPDATE_BED':
       return {
@@ -34,6 +35,11 @@ export const bedsReducer = (state, { type, payload, error }) => {
         ...state,
         loading: false,
         beds: state.beds.filter((bed) => bed.id !== payload),
+      };
+    case 'CLEAR_RECENT_BED':
+      return {
+        ...state,
+        recentBed: null,
       };
     default:
       throw new Error(`Unhandled action type: ${type}`);

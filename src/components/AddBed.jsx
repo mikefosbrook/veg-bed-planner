@@ -1,14 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBedsState } from '../context/beds/index';
+import { createBed } from '../context/beds/actions';
+import { useBedsDispatch } from '../context/beds/context';
 
-export default function CreateBed() {
-  const { beds: bedData, loading, error } = useBedsState();
-  const API_HOST = import.meta.env.VITE_API_HOST;
+export default function AddBed() {
+  const { recentBed, beds: bedData, loading, error } = useBedsState();
   const [name, setName] = useState('');
   const [cellsX, setCellsX] = useState(1);
   const [cellsY, setCellsY] = useState(1);
   const navigate = useNavigate();
+  const dispatchBeds = useBedsDispatch();
+
+  useEffect(() => {
+    if (recentBed) {
+      const newBed = { ...recentBed };
+      dispatchBeds({ type: 'CLEAR_RECENT_BED' });
+      navigate(`/beds/${newBed.id}`);
+    }
+  }, [recentBed, dispatchBeds, navigate]);
 
   const createCells = (x, y) => {
     const cells = x * y;
@@ -23,16 +33,7 @@ export default function CreateBed() {
     return emptyCells;
   };
 
-  const createBed = async (bed) => {
-    await fetch(`${API_HOST}/beds`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(bed),
-    });
-    navigate(`/beds/${bedData.id}`);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const bed = {
       name,
@@ -41,7 +42,9 @@ export default function CreateBed() {
       cells: createCells(cellsX, cellsY),
     };
 
-    createBed(bed);
+    await createBed(dispatchBeds, bed);
+
+    // navigate to the new bed is handled by useEffect above
   };
 
   return (
@@ -49,7 +52,7 @@ export default function CreateBed() {
       {error && <div>{error}</div>}
       {loading && <div>Loading...</div>}
 
-      <h2>Create a new bed</h2>
+      <h2>Add a new bed</h2>
       {bedData && (
         <form onSubmit={handleSubmit}>
           <label htmlFor="name">Name</label>

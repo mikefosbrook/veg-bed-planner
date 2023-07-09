@@ -83,3 +83,32 @@ export const updateBed = async (dispatch, id, data) => {
     dispatch({ type: 'BEDS_FAIL', error });
   }
 };
+
+export const createBed = async (dispatch, data) => {
+  dispatch({ type: 'REQUEST_BEDS' });
+  try {
+    const response = await fetch(`${API_HOST}/beds/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      dispatch({
+        type: 'BEDS_FAIL',
+        error: { message: 'Could not fetch bed data' },
+      });
+      throw Error(response.statusText);
+    }
+
+    let newBed = await response.json();
+
+    dispatch({ type: 'CREATE_BED', payload: newBed });
+
+    return null;
+  } catch (error) {
+    dispatch({ type: 'BEDS_FAIL', error });
+  }
+};

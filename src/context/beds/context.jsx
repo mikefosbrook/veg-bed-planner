@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   error: null,
   beds: [],
+  recentBed: null,
   // isSaved: true, // TO DO - set isSaved via reducer, and then remove local storage as all state will perist in context
 };
 const initializer = localStorage.getItem('beds') ? JSON.parse(localStorage.getItem('beds')) : initialState;
