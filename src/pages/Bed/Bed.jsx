@@ -8,6 +8,7 @@ import { useBedsDispatch } from '../../contexts/Beds/context';
 
 export default function Bed() {
   const { id } = useParams();
+  const bedId = parseInt(id);
   const navigate = useNavigate();
   const dispatchBeds = useBedsDispatch();
   const { beds: bedData, loading, error } = useBedsState();
@@ -17,26 +18,25 @@ export default function Bed() {
   const [selectedCells, setSelectedCells] = useState([]);
 
   useEffect(() => {
-    //only run if we don't already have data in context
+    //only run if we don't already have data in context (if you land on this page directly)
     if (bedData.length === 0) {
-      console.log('getting beds');
       getBeds(dispatchBeds);
     }
   }, [bedData, dispatchBeds]);
 
   useEffect(() => {
-    const getBed = (id) => {
-      id = parseInt(id);
-      return bedData.find((bed) => bed.id === id);
+    const getBed = (bedId) => {
+      return bedData.find((bed) => bed.id === bedId);
     };
+    const currentBedData = getBed(bedId);
 
-    console.log('setCurrentBed', id);
-
-    //check the bed id exists before setting the current bed
-    if (bedData.length > 0) {
-      setCurrentBed(getBed(id));
+    if (currentBedData && currentBed === '') {
+      setCurrentBed(currentBedData);
     }
-  }, [bedData, id]);
+    if (!currentBedData && currentBed === '') {
+      navigate('/404');
+    }
+  }, [bedData, bedId, navigate, currentBed]);
 
   const selectCells = (index) => {
     let newSelectedCells = [...selectedCells];
@@ -77,17 +77,12 @@ export default function Bed() {
   };
 
   const removeBed = async () => {
-    await deleteBed(dispatchBeds, id);
-    // dispatchBeds({
-    //   type: 'DELETE_BED',
-    //   payload: id,
-    // });
-
+    await deleteBed(dispatchBeds, bedId);
     navigate('/');
   };
 
   const saveBed = async () => {
-    await updateBed(dispatchBeds, id, currentBed);
+    await updateBed(dispatchBeds, bedId, currentBed);
     setIsSaved(true);
   };
 
