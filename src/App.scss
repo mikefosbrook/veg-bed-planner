@@ -19,7 +19,9 @@
     background-color: paleturquoise;
   }
   &:focus {
-    background-color: palegreen;
+    animation: fadeFocus 2s forwards;
+    outline: orange 2px solid;
+    outline-offset: -2px;
   }
 }
 

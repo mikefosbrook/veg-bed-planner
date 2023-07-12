@@ -1,34 +1,29 @@
 import './App.scss';
-import Home from './components/Home.jsx';
-import Bed from './components/Bed.jsx';
-import NotFound from './components/NotFound.jsx';
-import CreateBed from './components/CreateBed';
-import { Routes, Route, NavLink } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import { BedsProvider } from './contexts/Beds';
+import Navigation from './components/Navigation/Navigation';
+import Home from './pages/Home/Home';
+import AddBed from './pages/AddBed/AddBed';
+import Bed from './pages/Bed/Bed';
+import NotFound from './pages/NotFound/NotFound';
 
 function App() {
   return (
     <>
-      <header>
-        <nav className="container-fluid">
-          <ul>
-            <li>
-              <NavLink to="/">Home</NavLink>
-            </li>
-            <li>
-              <NavLink to="/create-bed">Add bed</NavLink>
-            </li>
-          </ul>
-        </nav>
-      </header>
-      <main className="container">
-        <h1>Veg bed planner</h1>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/create-bed" element={<CreateBed />} />
-          <Route path="/beds/:id" element={<Bed />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
+      <BedsProvider ContextProvider>
+        <header>
+          <Navigation />
+        </header>
+        <main className="container">
+          <h1>Veg bed planner</h1>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/add-bed" element={<AddBed />} />
+            <Route path="/beds/:id" element={<Bed />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+      </BedsProvider>
     </>
   );
 }

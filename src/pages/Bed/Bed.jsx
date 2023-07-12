@@ -1,24 +1,42 @@
-import useFetch from '../hooks/useFetch';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Cell from './Cell';
-import VegSelect from './VegSelect';
+import Cell from './components/Cell';
+import VegSelect from './components/VegSelect';
+import { useBedsState } from '../../contexts/Beds/index';
+import { getBeds, deleteBed, updateBed } from '../../contexts/Beds/actions';
+import { useBedsDispatch } from '../../contexts/Beds/context';
 
 export default function Bed() {
   const { id } = useParams();
+  const bedId = parseInt(id);
   const navigate = useNavigate();
-
-  const API_HOST = import.meta.env.VITE_API_HOST;
-  const { data, isLoading, error, fetchRequest } = useFetch(`${API_HOST}/beds/${id}`);
-  const [bedData, setBedData] = useState(null);
+  const dispatchBeds = useBedsDispatch();
+  const { beds: bedData, loading, error } = useBedsState();
+  const [currentBed, setCurrentBed] = useState('');
   const [currentVeg, setCurrentVeg] = useState('');
   const [isSaved, setIsSaved] = useState(true);
   const [selectedCells, setSelectedCells] = useState([]);
 
-  if (data && !bedData) {
-    // this is the first time we have data
-    setBedData(data);
-  }
+  useEffect(() => {
+    //only run if we don't already have data in context (if you land on this page directly)
+    if (bedData.length === 0) {
+      getBeds(dispatchBeds);
+    }
+  }, [bedData, dispatchBeds]);
+
+  useEffect(() => {
+    const getBed = (bedId) => {
+      return bedData.find((bed) => bed.id === bedId);
+    };
+    const currentBedData = getBed(bedId);
+
+    if (currentBedData && currentBed === '') {
+      setCurrentBed(currentBedData);
+    }
+    if (!currentBedData && currentBed === '') {
+      navigate('/404');
+    }
+  }, [bedData, bedId, navigate, currentBed]);
 
   const selectCells = (index) => {
     let newSelectedCells = [...selectedCells];
@@ -43,50 +61,38 @@ export default function Bed() {
   };
 
   const updateCells = (value) => {
-    let newBedData = { ...bedData };
+    let newBedData = { ...currentBed };
 
     selectedCells.forEach((i) => {
       newBedData.cells[i].vegetable = value;
     });
 
-    setBedData(newBedData);
+    dispatchBeds({
+      type: 'UPDATE_BED',
+      payload: newBedData,
+    });
+
     setSelectedCells([]);
     setIsSaved(false);
   };
 
-  const deleteBed = () => {
-    fetchRequest(
-      `${API_HOST}/beds/${id}`,
-      {
-        method: 'DELETE',
-      },
-      () => {
-        navigate('/');
-      },
-    );
+  const removeBed = async () => {
+    await deleteBed(dispatchBeds, bedId);
+    navigate('/');
   };
 
-  const saveBed = () => {
-    fetchRequest(
-      `${API_HOST}/beds/${id}`,
-      {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bedData),
-      },
-      () => {
-        setIsSaved(true);
-      },
-    );
+  const saveBed = async () => {
+    await updateBed(dispatchBeds, bedId, currentBed);
+    setIsSaved(true);
   };
 
   return (
     <>
-      {error && <div>{error}</div>}
-      {isLoading && <div>Loading...</div>}
+      {error && <div>{error.message}</div>}
+      {loading && <div>Loading...</div>}
 
       <button onClick={() => saveBed()} disabled={isSaved}>
-        Save
+        {loading ? 'Saving...' : 'Save'}
       </button>
 
       <VegSelect veg={currentVeg} setCurrentVeg={setCurrentVeg} />
@@ -104,17 +110,17 @@ export default function Bed() {
         Clear selection
       </button>
 
-      {bedData && (
+      {currentBed && (
         <>
-          <h2>{bedData.name}</h2>
+          <h2>{currentBed.name}</h2>
 
           <p>
-            {bedData.cellsX} x {bedData.cellsY}
+            {currentBed.cellsX} x {currentBed.cellsY}
           </p>
 
           <div className="bed-container">
-            <div className="bed" role="grid" style={{ gridTemplateColumns: 'auto '.repeat(bedData.cellsX) }}>
-              {bedData.cells.map((cell, i) => {
+            <div className="bed" role="grid" style={{ gridTemplateColumns: 'auto '.repeat(currentBed.cellsX) }}>
+              {currentBed.cells.map((cell, i) => {
                 return (
                   <Cell
                     name={cell.name}
@@ -132,10 +138,10 @@ export default function Bed() {
 
           <button
             onClick={() => {
-              deleteBed();
+              removeBed();
             }}
           >
-            Delete bed
+            {loading ? 'Deleting...' : 'Delete'}
           </button>
         </>
       )}

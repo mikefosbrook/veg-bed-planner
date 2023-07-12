@@ -1,15 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useFetch from '../hooks/useFetch';
+import { useBedsState } from '../../contexts/Beds/index';
+import { createBed } from '../../contexts/Beds/actions';
+import { useBedsDispatch } from '../../contexts/Beds/context';
 
-export default function CreateBed() {
-  const API_HOST = import.meta.env.VITE_API_HOST;
+export default function AddBed() {
+  const { recentBed, beds: bedData, loading, error } = useBedsState();
   const [name, setName] = useState('');
   const [cellsX, setCellsX] = useState(1);
   const [cellsY, setCellsY] = useState(1);
   const navigate = useNavigate();
+  const dispatchBeds = useBedsDispatch();
 
-  const { data, isLoading, error, fetchRequest } = useFetch(`${API_HOST}/beds`);
+  useEffect(() => {
+    if (recentBed) {
+      const newBed = { ...recentBed };
+      dispatchBeds({ type: 'CLEAR_RECENT_BED' });
+      navigate(`/beds/${newBed.id}`);
+    }
+  }, [recentBed, dispatchBeds, navigate]);
 
   const createCells = (x, y) => {
     const cells = x * y;
@@ -24,20 +33,6 @@ export default function CreateBed() {
     return emptyCells;
   };
 
-  const createBed = (bed) => {
-    fetchRequest(
-      `${API_HOST}/beds`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bed),
-      },
-      (data) => {
-        navigate(`/beds/${data.id}`);
-      },
-    );
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const bed = {
@@ -47,16 +42,18 @@ export default function CreateBed() {
       cells: createCells(cellsX, cellsY),
     };
 
-    createBed(bed);
+    createBed(dispatchBeds, bed);
+
+    // navigate to the new bed is handled by useEffect above
   };
 
   return (
     <>
       {error && <div>{error}</div>}
-      {isLoading && <div>Loading...</div>}
+      {loading && <div>Loading...</div>}
 
-      <h2>Create a new bed</h2>
-      {data && (
+      <h2>Add a new bed</h2>
+      {bedData && (
         <form onSubmit={handleSubmit}>
           <label htmlFor="name">Name</label>
           <input type="text" id="name" name="name" required value={name} onChange={(e) => setName(e.target.value)} />
@@ -82,7 +79,7 @@ export default function CreateBed() {
           />
           <input
             type="submit"
-            value={isLoading ? 'Creating bed...' : 'Create bed'}
+            value={loading ? 'Creating bed...' : 'Create bed'}
             disabled={name == '' ? true : false}
           />
         </form>

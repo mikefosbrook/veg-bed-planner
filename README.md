@@ -22,6 +22,12 @@ A vegetable bed planning app based on the [Square Foot Gardening](https://square
 npm install
 ```
 
+Create a file called .env.local in the root directory and add the following:
+
+```
+VITE_API_HOST=http://localhost:4000
+```
+
 ### Running
 
 ```
