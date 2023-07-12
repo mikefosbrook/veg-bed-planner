@@ -1,11 +1,11 @@
 import './App.scss';
 import { Routes, Route } from 'react-router-dom';
 import { BedsProvider } from './contexts/Beds';
-import Navigation from './components/Navigation/Navigation.jsx';
-import Home from './pages/Home/Home.jsx';
+import Navigation from './components/Navigation/Navigation';
+import Home from './pages/Home/Home';
 import AddBed from './pages/AddBed/AddBed';
-import Bed from './pages/Bed/Bed.jsx';
-import NotFound from './pages/NotFound/NotFound.jsx';
+import Bed from './pages/Bed/Bed';
+import NotFound from './pages/NotFound/NotFound';
 
 function App() {
   return (
