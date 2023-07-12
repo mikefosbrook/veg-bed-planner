@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Cell from './Cell';
-import VegSelect from './VegSelect';
-import { useBedsState } from '../context/beds/index';
-import { getBeds, deleteBed, updateBed } from '../context/beds/actions';
-import { useBedsDispatch } from '../context/beds/context';
+import Cell from './components/Cell';
+import VegSelect from './components/VegSelect';
+import { useBedsState } from '../../contexts/Beds/index';
+import { getBeds, deleteBed, updateBed } from '../../contexts/Beds/actions';
+import { useBedsDispatch } from '../../contexts/Beds/context';
 
 export default function Bed() {
   const { id } = useParams();
@@ -17,16 +17,26 @@ export default function Bed() {
   const [selectedCells, setSelectedCells] = useState([]);
 
   useEffect(() => {
+    //only run if we don't already have data in context
+    if (bedData.length === 0) {
+      console.log('getting beds');
+      getBeds(dispatchBeds);
+    }
+  }, [bedData, dispatchBeds]);
+
+  useEffect(() => {
     const getBed = (id) => {
       id = parseInt(id);
       return bedData.find((bed) => bed.id === id);
     };
 
-    if (bedData.length === 0) getBeds(dispatchBeds);
+    console.log('setCurrentBed', id);
+
+    //check the bed id exists before setting the current bed
     if (bedData.length > 0) {
       setCurrentBed(getBed(id));
     }
-  }, [bedData, id, setCurrentBed, dispatchBeds]);
+  }, [bedData, id]);
 
   const selectCells = (index) => {
     let newSelectedCells = [...selectedCells];
@@ -68,6 +78,11 @@ export default function Bed() {
 
   const removeBed = async () => {
     await deleteBed(dispatchBeds, id);
+    // dispatchBeds({
+    //   type: 'DELETE_BED',
+    //   payload: id,
+    // });
+
     navigate('/');
   };
 
@@ -82,7 +97,7 @@ export default function Bed() {
       {loading && <div>Loading...</div>}
 
       <button onClick={() => saveBed()} disabled={isSaved}>
-        Save
+        {loading ? 'Saving...' : 'Save'}
       </button>
 
       <VegSelect veg={currentVeg} setCurrentVeg={setCurrentVeg} />
@@ -131,7 +146,7 @@ export default function Bed() {
               removeBed();
             }}
           >
-            Delete bed
+            {loading ? 'Deleting...' : 'Delete'}
           </button>
         </>
       )}

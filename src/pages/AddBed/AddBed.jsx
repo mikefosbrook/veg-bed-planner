@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useBedsState } from '../context/beds/index';
-import { createBed } from '../context/beds/actions';
-import { useBedsDispatch } from '../context/beds/context';
+import { useBedsState } from '../../contexts/Beds/index';
+import { createBed } from '../../contexts/Beds/actions';
+import { useBedsDispatch } from '../../contexts/Beds/context';
 
 export default function AddBed() {
   const { recentBed, beds: bedData, loading, error } = useBedsState();
@@ -33,7 +33,7 @@ export default function AddBed() {
     return emptyCells;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const bed = {
       name,
@@ -42,7 +42,7 @@ export default function AddBed() {
       cells: createCells(cellsX, cellsY),
     };
 
-    await createBed(dispatchBeds, bed);
+    createBed(dispatchBeds, bed);
 
     // navigate to the new bed is handled by useEffect above
   };

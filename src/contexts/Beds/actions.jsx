@@ -40,7 +40,7 @@ export const deleteBed = async (dispatch, id) => {
       });
       throw Error(response.statusText);
     }
-
+    console.log('deleteBed', id);
     dispatch({ type: 'DELETE_BED', payload: id });
 
     return null;

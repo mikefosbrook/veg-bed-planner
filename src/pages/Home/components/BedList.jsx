@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
-//  use dispatch to delete bed
-import { useBedsDispatch } from '../context/beds/context';
-import { deleteBed } from '../context/beds/actions';
+import { useBedsDispatch } from '../../../contexts/Beds/context';
+import { deleteBed } from '../../../contexts/Beds/actions';
 
 export default function BedList({ beds }) {
   const dispatchBeds = useBedsDispatch();

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import BedList from '../components/BedList';
+import BedList from './components/BedList';
 import { Link } from 'react-router-dom';
-import { useBedsState } from '../context/beds/index';
-import { getBeds } from '../context/beds/actions';
-import { useBedsDispatch } from '../context/beds/context';
+import { useBedsState } from '../../contexts/Beds/index';
+import { getBeds } from '../../contexts/Beds/actions';
+import { useBedsDispatch } from '../../contexts/Beds/context';
 
 export default function Home() {
   const dispatchBeds = useBedsDispatch();
