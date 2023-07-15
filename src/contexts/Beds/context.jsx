@@ -1,3 +1,6 @@
+// This is how react docs instruct you to set up context and reducer
+// https://react.dev/learn/scaling-up-with-reducer-and-context#moving-all-wiring-into-a-single-file
+
 import { createContext, useContext, useEffect, useReducer } from 'react';
 
 import { bedsReducer } from './reducer';
