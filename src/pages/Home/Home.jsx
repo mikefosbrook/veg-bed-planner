@@ -23,7 +23,7 @@ export default function Home() {
           <Link to="/add-bed" role="button">
             Add a new bed
           </Link>
-          <BedList beds={bedData} />
+          {bedData.length ? <BedList beds={bedData} /> : <p>No beds yet. Add one above.</p>}
         </>
       )}
     </div>
