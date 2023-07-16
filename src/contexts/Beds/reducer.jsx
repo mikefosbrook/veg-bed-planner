@@ -1,10 +1,5 @@
 export const bedsReducer = (state, { type, payload, error }) => {
   switch (type) {
-    case 'REQUEST_BEDS':
-      return {
-        ...state,
-        loading: true,
-      };
     case 'BEDS_SUCCESS':
       return {
         ...state,
