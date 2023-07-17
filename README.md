@@ -1,5 +1,7 @@
 # Veg Bed Planner
 
+https://veg-bed-planner.netlify.app/
+
 A vegetable bed planning app based on the [Square Foot Gardening](https://squarefootgardening.org/ 'Square Foot Gardening') technique.
 
 ## Technologies
@@ -51,8 +53,16 @@ npm run test
 
 ## Data
 
+### Local Data
+
 Data is provided in the form of a fake REST API using JSON Server and accessed via:
 http://localhost:4000/beds All bed data
 http://localhost:4000/beds/[id] Specific bed
 
 The data is stored at`/src/data/db.json`
+
+### Production Data
+
+In production, in lieu of a real backend, a separate instance of JSON Server is hosted on Glitch:
+https://prong-iridescent-tennis.glitch.me/beds All bed data
+https://prong-iridescent-tennis.glitch.me/beds/[id] Specific bed
