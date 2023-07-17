@@ -1,12 +1,19 @@
 const API_HOST = import.meta.env.VITE_API_HOST;
 
+const throwError = (response, dispatch) => {
+  dispatch({
+    type: 'BEDS_FAIL',
+    error: { message: 'Could not fetch bed data' },
+  });
+  throw Error(response.statusText);
+};
+
 export const getBeds = async (dispatch) => {
-  dispatch({ type: 'REQUEST_BEDS' });
   try {
     const response = await fetch(`${API_HOST}/beds/`);
 
     if (!response.ok) {
-      throw Error(response.statusText);
+      throwError(response, dispatch);
     }
 
     let data = await response.json();
@@ -16,12 +23,6 @@ export const getBeds = async (dispatch) => {
       return data;
     }
 
-    // No match found on server
-    dispatch({
-      type: 'BEDS_FAIL',
-      error: { message: 'Could not fetch bed data' },
-    });
-
     return null;
   } catch (error) {
     dispatch({ type: 'BEDS_FAIL', error });
@@ -29,18 +30,12 @@ export const getBeds = async (dispatch) => {
 };
 
 export const deleteBed = async (dispatch, id) => {
-  dispatch({ type: 'REQUEST_BEDS' });
   try {
     const response = await fetch(`${API_HOST}/beds/${id}`, { method: 'DELETE' });
 
     if (!response.ok) {
-      dispatch({
-        type: 'BEDS_FAIL',
-        error: { message: 'Could not fetch bed data' },
-      });
-      throw Error(response.statusText);
+      throwError(response, dispatch);
     }
-    console.log('deleteBed', id);
     dispatch({ type: 'DELETE_BED', payload: id });
 
     return null;
@@ -53,7 +48,6 @@ export const deleteBed = async (dispatch, id) => {
 };
 
 export const updateBed = async (dispatch, id, data) => {
-  dispatch({ type: 'REQUEST_BEDS' });
   try {
     const response = await fetch(`${API_HOST}/beds/${id}`, {
       method: 'PUT',
@@ -64,11 +58,7 @@ export const updateBed = async (dispatch, id, data) => {
     });
 
     if (!response.ok) {
-      dispatch({
-        type: 'BEDS_FAIL',
-        error: { message: 'Could not fetch bed data' },
-      });
-      throw Error(response.statusText);
+      throwError(response, dispatch);
     }
 
     let updatedBed = await response.json();
@@ -85,7 +75,6 @@ export const updateBed = async (dispatch, id, data) => {
 };
 
 export const createBed = async (dispatch, data) => {
-  dispatch({ type: 'REQUEST_BEDS' });
   try {
     const response = await fetch(`${API_HOST}/beds/`, {
       method: 'POST',
@@ -96,11 +85,7 @@ export const createBed = async (dispatch, data) => {
     });
 
     if (!response.ok) {
-      dispatch({
-        type: 'BEDS_FAIL',
-        error: { message: 'Could not fetch bed data' },
-      });
-      throw Error(response.statusText);
+      throwError(response, dispatch);
     }
 
     let newBed = await response.json();
