@@ -78,7 +78,7 @@ describe('Home', () => {
       </BrowserRouter>,
     );
 
-    const addBedButton = screen.getByRole('button', { name: 'Add a new bed' });
+    const addBedButton = await screen.findByRole('button', { name: 'Add a new bed' });
 
     act(() => {
       fireEvent.click(addBedButton);
