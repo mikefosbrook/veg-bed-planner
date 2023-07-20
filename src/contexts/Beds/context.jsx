@@ -1,7 +1,7 @@
 // This is how react docs instruct you to set up context and reducer
 // https://react.dev/learn/scaling-up-with-reducer-and-context#moving-all-wiring-into-a-single-file
 
-import { createContext, useContext, useEffect, useReducer } from 'react';
+import { createContext, useContext, useReducer } from 'react';
 
 import { bedsReducer } from './reducer';
 
@@ -11,25 +11,19 @@ const initialState = {
   beds: [],
   recentBed: null,
 };
-const initializer = localStorage.getItem('beds') ? JSON.parse(localStorage.getItem('beds')) : initialState;
 
-const BedsStateContext = createContext();
+const BedsContext = createContext();
 const BedsDispatchContext = createContext();
 
-export const useBedsState = () => useContext(BedsStateContext);
+export const useBedsState = () => useContext(BedsContext);
 export const useBedsDispatch = () => useContext(BedsDispatchContext);
 
 export const BedsProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(bedsReducer, initializer);
-
-  // Persist state on each update
-  useEffect(() => {
-    localStorage.setItem('beds', JSON.stringify(state));
-  }, [state]);
+  const [state, dispatch] = useReducer(bedsReducer, initialState);
 
   return (
-    <BedsStateContext.Provider value={state}>
+    <BedsContext.Provider value={state}>
       <BedsDispatchContext.Provider value={dispatch}>{children}</BedsDispatchContext.Provider>
-    </BedsStateContext.Provider>
+    </BedsContext.Provider>
   );
 };
