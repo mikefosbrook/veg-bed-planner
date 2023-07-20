@@ -52,31 +52,37 @@ export default function AddBed() {
       {error && <div>{error.message}</div>}
       {loading && <div>Loading...</div>}
 
-      <h2>Add a new bed</h2>
+      <h1>Add a new bed</h1>
       {bedData && (
         <form onSubmit={handleSubmit}>
           <label htmlFor="name">Name</label>
           <input type="text" id="name" name="name" required value={name} onChange={(e) => setName(e.target.value)} />
-          <label htmlFor="x">Number of squares across</label>
-          <input
-            type="number"
-            id="x"
-            name="x"
-            min="1"
-            max="12"
-            value={cellsX}
-            onChange={(e) => setCellsX(e.target.value)}
-          />
-          <label htmlFor="y">Number of squares down</label>
-          <input
-            type="number"
-            id="y"
-            name="y"
-            min="1"
-            max="12"
-            value={cellsY}
-            onChange={(e) => setCellsY(e.target.value)}
-          />
+          <div className="grid">
+            <label htmlFor="x">
+              Squares across
+              <input
+                type="number"
+                id="x"
+                name="x"
+                min="1"
+                max="12"
+                value={cellsX}
+                onChange={(e) => setCellsX(e.target.value)}
+              />
+            </label>
+            <label htmlFor="y">
+              Squares down
+              <input
+                type="number"
+                id="y"
+                name="y"
+                min="1"
+                max="12"
+                value={cellsY}
+                onChange={(e) => setCellsY(e.target.value)}
+              />
+            </label>
+          </div>
           <input
             type="submit"
             value={loading ? 'Creating bed...' : 'Create bed'}

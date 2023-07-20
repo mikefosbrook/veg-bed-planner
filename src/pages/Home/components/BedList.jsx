@@ -10,13 +10,13 @@ export default function BedList({ beds }) {
       {beds.map((bed) => (
         <Link className="beds-preview" to={`/beds/${bed.id}`} key={bed.id}>
           <article key={bed.id}>
-            <h2>{bed.name}</h2>
+            <h1>{bed.name}</h1>
             <p>
               ({bed.cellsX} x {bed.cellsY})
             </p>
 
             <button
-              className="btn btn-inline outline"
+              className="btn btn-inline outline align-right"
               type="button"
               onClick={(e) => {
                 deleteBed(dispatchBeds, bed.id);

@@ -97,22 +97,24 @@ export default function Bed() {
 
       <VegSelect veg={currentVeg} setCurrentVeg={setCurrentVeg} />
 
-      <button
-        onClick={() => {
-          addVeg(currentVeg);
-        }}
-        disabled={!selectedCells.length}
-      >
-        Apply selection
-      </button>
+      <div className="grid">
+        <button
+          onClick={() => {
+            addVeg(currentVeg);
+          }}
+          disabled={!selectedCells.length || !currentVeg}
+        >
+          Apply selection
+        </button>
 
-      <button onClick={removeVeg} disabled={!selectedCells.length}>
-        Clear selection
-      </button>
+        <button onClick={removeVeg} disabled={!selectedCells.length}>
+          Clear selection
+        </button>
+      </div>
 
       {currentBed && (
         <>
-          <h2>{currentBed.name}</h2>
+          <h1 className="collapse-margin">{currentBed.name}</h1>
 
           <p>
             {currentBed.cellsX} x {currentBed.cellsY}

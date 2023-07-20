@@ -60,10 +60,33 @@ nav {
 }
 
 main {
-  padding-top: 4em;
+  padding-top: 8em;
+}
+
+h1 {
+  color: #f6891e;
+  font-size: 1.75rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  padding-top: 10px;
+  a {
+    background-color: transparent;
+  }
+  img {
+    width: 250px;
+  }
 }
 
 .beds-preview {
+  article {
+    position: relative;
+    padding-right: calc(var(--block-spacing-horizontal) * 5);
+  }
   &:hover {
     article {
       background-color: var(--primary-focus);
@@ -93,6 +116,16 @@ $vegetables: 'beetroot', 'carrot', 'courgette', 'kale', 'leek', 'lettuce', 'onio
       color: #ffffff;
     }
   }
+}
+
+.align-right {
+  position: absolute;
+  top: var(--block-spacing-vertical);
+  right: var(--block-spacing-horizontal);
+}
+
+.collapse-margin {
+  margin-bottom: 0;
 }
 
 .active {

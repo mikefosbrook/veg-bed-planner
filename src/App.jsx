@@ -15,7 +15,6 @@ function App() {
           <Navigation />
         </header>
         <main className="container">
-          <h1>Veg bed planner</h1>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/add-bed" element={<AddBed />} />
