@@ -6,9 +6,9 @@ import { createContext, useContext, useReducer } from 'react';
 import { bedsReducer } from './reducer';
 
 const initialState = {
-  loading: false,
+  loading: true,
   error: null,
-  beds: [],
+  beds: null,
   recentBed: null,
 };
 

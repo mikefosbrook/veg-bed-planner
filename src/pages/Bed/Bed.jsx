@@ -88,7 +88,7 @@ export default function Bed() {
 
   return (
     <>
-      {error && <div>{error.message}</div>}
+      {error && <div>Error: {error.message}</div>}
       {loading && <div>Loading...</div>}
 
       <button onClick={() => saveBed()} disabled={isSaved}>

@@ -1,29 +1,16 @@
 const API_HOST = import.meta.env.VITE_API_HOST;
 
-const throwError = (response, dispatch) => {
-  dispatch({
-    type: 'BEDS_FAIL',
-    error: { message: 'Could not fetch bed data' },
-  });
-  throw Error(response.statusText);
-};
-
 export const getBeds = async (dispatch) => {
   try {
     const response = await fetch(`${API_HOST}/beds/`);
 
     if (!response.ok) {
-      throwError(response, dispatch);
+      throw Error(response.statusText);
     }
 
     let data = await response.json();
 
-    if (data.length) {
-      dispatch({ type: 'BEDS_SUCCESS', payload: data });
-      return data;
-    }
-
-    return null;
+    dispatch({ type: 'BEDS_SUCCESS', payload: data });
   } catch (error) {
     dispatch({ type: 'BEDS_FAIL', error });
   }
@@ -34,11 +21,9 @@ export const deleteBed = async (dispatch, id) => {
     const response = await fetch(`${API_HOST}/beds/${id}`, { method: 'DELETE' });
 
     if (!response.ok) {
-      throwError(response, dispatch);
+      throw Error(response.statusText);
     }
     dispatch({ type: 'DELETE_BED', payload: id });
-
-    return null;
   } catch (error) {
     if (error.message === 'Not Found') {
       error.message = `Unable to delete. Bed ID ${id} does not exist`;
@@ -58,14 +43,12 @@ export const updateBed = async (dispatch, id, data) => {
     });
 
     if (!response.ok) {
-      throwError(response, dispatch);
+      throw Error(response.statusText);
     }
 
     let updatedBed = await response.json();
 
     dispatch({ type: 'UPDATE_BED', payload: updatedBed });
-
-    return null;
   } catch (error) {
     if (error.message === 'Not Found') {
       error.message = `Unable to update. Bed ID ${id} does not exist`;
@@ -85,14 +68,12 @@ export const createBed = async (dispatch, data) => {
     });
 
     if (!response.ok) {
-      throwError(response, dispatch);
+      throw Error(response.statusText);
     }
 
     let newBed = await response.json();
 
     dispatch({ type: 'CREATE_BED', payload: newBed });
-
-    return null;
   } catch (error) {
     dispatch({ type: 'BEDS_FAIL', error });
   }

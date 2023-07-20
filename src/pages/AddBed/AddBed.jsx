@@ -49,7 +49,7 @@ export default function AddBed() {
 
   return (
     <>
-      {error && <div>{error.message}</div>}
+      {error && <div>Error: {error.message}</div>}
       {loading && <div>Loading...</div>}
 
       <h1>Add a new bed</h1>

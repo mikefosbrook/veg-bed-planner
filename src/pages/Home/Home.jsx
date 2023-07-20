@@ -11,19 +11,19 @@ export default function Home() {
 
   useEffect(() => {
     //only run if we don't already have data in context
-    if (bedData.length === 0) getBeds(dispatchBeds);
+    if (bedData === null) getBeds(dispatchBeds);
   }, [bedData, dispatchBeds]);
 
   return (
     <div className="home">
-      {error && <div>{error.message}</div>}
+      {error && <div>Error: {error.message}</div>}
       {loading && <div>Loading...</div>}
       {bedData && (
         <>
           <Link to="/add-bed" role="button">
             Add a new bed
           </Link>
-          {bedData.length ? <BedList beds={bedData} /> : <p>No beds yet. Add one above.</p>}
+          {bedData.length ? <BedList beds={bedData} /> : <p className="prompt">No beds yet. Add one above.</p>}
         </>
       )}
     </div>
