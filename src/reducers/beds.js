@@ -1,4 +1,11 @@
-export const bedsReducer = (state, { type, payload, error }) => {
+const initialState = {
+  loading: true,
+  error: null,
+  beds: null,
+  recentBed: null,
+};
+
+const beds = (state = initialState, { type, payload, error }) => {
   switch (type) {
     case 'BEDS_SUCCESS':
       return {
@@ -37,6 +44,8 @@ export const bedsReducer = (state, { type, payload, error }) => {
         recentBed: null,
       };
     default:
-      throw new Error(`Unhandled action type: ${type}`);
+      return state;
   }
 };
+
+export default beds;
