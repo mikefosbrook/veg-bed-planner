@@ -1,17 +1,18 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { BedsProvider } from '../../contexts/Beds';
 import Home from './Home';
 import App from '../../App';
 import { act } from 'react-dom/test-utils';
+import { Provider } from 'react-redux';
+import store from '../../store';
 
 describe('Home', () => {
   test('<Home /> renders the <BedList /> with two Beds', async () => {
     render(
       <BrowserRouter>
-        <BedsProvider ContextProvider>
+        <Provider store={store}>
           <Home />
-        </BedsProvider>
+        </Provider>
       </BrowserRouter>,
     );
     const bed1 = await screen.findByRole('heading', { name: /Test Bed 1/i });
@@ -24,9 +25,9 @@ describe('Home', () => {
   test('If a user clicks the delete button on the first bed, then the bed is removed from the page', async () => {
     render(
       <BrowserRouter>
-        <BedsProvider ContextProvider>
+        <Provider store={store}>
           <Home />
-        </BedsProvider>
+        </Provider>
       </BrowserRouter>,
     );
 
@@ -46,9 +47,9 @@ describe('Home', () => {
   test('If a user clicks on a bed, then they are taken to the corresponding page', async () => {
     render(
       <BrowserRouter>
-        <BedsProvider ContextProvider>
+        <Provider store={store}>
           <App />
-        </BedsProvider>
+        </Provider>
       </BrowserRouter>,
     );
 
@@ -72,9 +73,9 @@ describe('Home', () => {
   test("If a user clicks 'Add a new bed', then they are taken to the page where they can create a bed", async () => {
     render(
       <BrowserRouter>
-        <BedsProvider ContextProvider>
+        <Provider store={store}>
           <App />
-        </BedsProvider>
+        </Provider>
       </BrowserRouter>,
     );
 

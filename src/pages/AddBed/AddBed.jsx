@@ -1,24 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useBedsState } from '../../contexts/Beds/index';
-import { createBed } from '../../contexts/Beds/actions';
-import { useBedsDispatch } from '../../contexts/Beds/context';
+import { useSelector, useDispatch } from 'react-redux';
+import allActions from '../../actions';
 
 export default function AddBed() {
-  const { recentBed, beds: bedData, loading, error } = useBedsState();
+  const { recentBed, beds: bedData, loading, error } = useSelector((state) => state.beds);
   const [name, setName] = useState('');
   const [cellsX, setCellsX] = useState(1);
   const [cellsY, setCellsY] = useState(1);
   const navigate = useNavigate();
-  const dispatchBeds = useBedsDispatch();
+  const dispatchBeds = useDispatch();
 
   useEffect(() => {
     if (recentBed) {
       const newBed = { ...recentBed };
       dispatchBeds({ type: 'CLEAR_RECENT_BED' });
       navigate(`/beds/${newBed.id}`);
+    } else if (!bedData) {
+      dispatchBeds(allActions.bedActions.getBeds());
     }
-  }, [recentBed, dispatchBeds, navigate]);
+  }, [bedData, recentBed, dispatchBeds, navigate]);
 
   const createCells = (x, y) => {
     const cells = x * y;
@@ -42,7 +43,7 @@ export default function AddBed() {
       cells: createCells(cellsX, cellsY),
     };
 
-    createBed(dispatchBeds, bed);
+    dispatchBeds(allActions.bedActions.createBed(bed));
 
     // navigate to the new bed is handled by useEffect above
   };
@@ -56,7 +57,15 @@ export default function AddBed() {
       {bedData && (
         <form onSubmit={handleSubmit}>
           <label htmlFor="name">Name</label>
-          <input type="text" id="name" name="name" required value={name} onChange={(e) => setName(e.target.value)} />
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            value={name}
+            autoComplete="off"
+            onChange={(e) => setName(e.target.value)}
+          />
           <div className="grid">
             <label htmlFor="x">
               Squares across

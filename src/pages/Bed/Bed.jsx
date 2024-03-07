@@ -2,41 +2,38 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Cell from './components/Cell';
 import VegSelect from './components/VegSelect';
-import { useBedsState } from '../../contexts/Beds/index';
-import { getBeds, deleteBed, updateBed } from '../../contexts/Beds/actions';
-import { useBedsDispatch } from '../../contexts/Beds/context';
+import allActions from '../../actions';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Bed() {
   const { id } = useParams();
   const bedId = parseInt(id);
   const navigate = useNavigate();
-  const dispatchBeds = useBedsDispatch();
-  const { beds: bedData, loading, error } = useBedsState();
+  const dispatchBeds = useDispatch();
+  const { beds: bedData, loading, error } = useSelector((state) => state.beds);
   const [currentBed, setCurrentBed] = useState('');
   const [currentVeg, setCurrentVeg] = useState('');
   const [isSaved, setIsSaved] = useState(true);
   const [selectedCells, setSelectedCells] = useState([]);
 
   useEffect(() => {
-    //only run if we don't already have data in context (if you land on this page directly)
-    if (bedData.length === 0) {
-      getBeds(dispatchBeds);
-    }
-  }, [bedData, dispatchBeds]);
+    // only run if we don't already have bedData (if you land on this page directly)
+    if (!bedData) {
+      dispatchBeds(allActions.bedActions.getBeds());
+    } else {
+      const getBed = (bedId) => {
+        return bedData.find((bed) => bed.id === bedId);
+      };
+      const currentBedData = getBed(bedId);
 
-  useEffect(() => {
-    const getBed = (bedId) => {
-      return bedData.find((bed) => bed.id === bedId);
-    };
-    const currentBedData = getBed(bedId);
-
-    if (currentBedData && currentBed === '') {
-      setCurrentBed(currentBedData);
+      if (currentBedData && currentBed === '') {
+        setCurrentBed(currentBedData);
+      }
+      if (!currentBedData && currentBed === '') {
+        navigate('/404');
+      }
     }
-    if (!currentBedData && currentBed === '') {
-      navigate('/404');
-    }
-  }, [bedData, bedId, navigate, currentBed]);
+  }, [bedData, dispatchBeds, navigate, bedId, currentBed]);
 
   const selectCells = (index) => {
     let newSelectedCells = [...selectedCells];
@@ -77,12 +74,12 @@ export default function Bed() {
   };
 
   const removeBed = async () => {
-    await deleteBed(dispatchBeds, bedId);
+    await dispatchBeds(allActions.bedActions.deleteBed(bedId));
     navigate('/');
   };
 
   const saveBed = async () => {
-    await updateBed(dispatchBeds, bedId, currentBed);
+    await dispatchBeds(allActions.bedActions.updateBed(bedId, currentBed));
     setIsSaved(true);
   };
 

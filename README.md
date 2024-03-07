@@ -12,7 +12,8 @@ A vegetable bed planning app based on the [Square Foot Gardening](https://square
 [JSON Server](https://github.com/typicode/json-server 'JSON Server')<br>
 [Testing Library](https://testing-library.com/, 'Testing Library')<br>
 [Vitest](https://vitest.dev/ 'Vitest')<br>
-[Mock Service Worker](https://mswjs.io/ 'MSW')
+[Mock Service Worker](https://mswjs.io/ 'MSW')<br>
+[Redux](https://redux.js.org/)
 
 ## Getting Started
 

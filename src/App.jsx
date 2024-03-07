@@ -1,6 +1,7 @@
+import { Provider } from 'react-redux';
+import store from './store';
 import './App.scss';
 import { Routes, Route } from 'react-router-dom';
-import { BedsProvider } from './contexts/Beds';
 import Navigation from './components/Navigation/Navigation';
 import Home from './pages/Home/Home';
 import AddBed from './pages/AddBed/AddBed';
@@ -10,7 +11,7 @@ import NotFound from './pages/NotFound/NotFound';
 function App() {
   return (
     <>
-      <BedsProvider ContextProvider>
+      <Provider store={store}>
         <header>
           <Navigation />
         </header>
@@ -22,7 +23,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
-      </BedsProvider>
+      </Provider>
     </>
   );
 }

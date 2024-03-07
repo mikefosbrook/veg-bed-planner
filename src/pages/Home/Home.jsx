@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
 import BedList from './components/BedList';
 import { Link } from 'react-router-dom';
-import { useBedsState } from '../../contexts/Beds/index';
-import { getBeds } from '../../contexts/Beds/actions';
-import { useBedsDispatch } from '../../contexts/Beds/context';
+import allActions from '../../actions';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function Home() {
-  const dispatchBeds = useBedsDispatch();
-  const { beds: bedData, loading, error } = useBedsState();
+  const dispatchBeds = useDispatch();
+
+  const { beds: bedData, loading, error } = useSelector((state) => state.beds);
 
   useEffect(() => {
-    //only run if we don't already have data in context
-    if (bedData === null) getBeds(dispatchBeds);
+    // only run if we don't already have bedData
+    if (!bedData) dispatchBeds(allActions.bedActions.getBeds());
   }, [bedData, dispatchBeds]);
 
   return (
